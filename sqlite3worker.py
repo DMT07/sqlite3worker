@@ -54,7 +54,7 @@ class Sqlite3Worker(threading.Thread):
         sql_worker.close()
     """
 
-    def __init__(self, file_name, max_queue_size=100):
+    def __init__(self, file_name, max_queue_size=100, row_factory=None):
         """Automatically starts the thread.
 
         Args:
@@ -67,6 +67,7 @@ class Sqlite3Worker(threading.Thread):
             file_name, check_same_thread=False, detect_types=sqlite3.PARSE_DECLTYPES
         )
         self._sqlite3_cursor = self._sqlite3_conn.cursor()
+        self._sqlite3_cursor.row_factory = row_factory
         self._sql_queue = Queue.Queue(maxsize=max_queue_size)
         self._results = {}
         self._max_queue_size = max_queue_size
